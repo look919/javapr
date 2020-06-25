@@ -50,10 +50,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 public class GUI {
 	
-	
 	private JFrame frame;
 	private JTextField numberField;
-	private JLabel dialogLabel, dialogLabel2, enterNumberLabel, positionLabel, rowLabel, columnLabel, resultLabel, AppLabelName;
+	private JLabel dialogLabel, dialogLabel2, enterNumberLabel, positionLabel, rowLabel, columnLabel, resultLabel;
 	private JTable table;
 	private JTextArea textArea;
 	private JList<String> list;
@@ -63,7 +62,6 @@ public class GUI {
 	private JToolBar toolBar;
 	private JPanel panel;
 	private JButton addButton, zerosButton, fileButton;
-	private JOptionPane optionPane;
 
 	//main
 	public static void main(String[] args) {
@@ -126,7 +124,6 @@ public class GUI {
 		menu.add(menuItemExit);
 		frame.setJMenuBar(menuBar);
 		
-		
 		//toolbar
 		toolBar = new JToolBar();
 	    toolBar.setRollover(true);
@@ -169,12 +166,12 @@ public class GUI {
 		frame.getContentPane().add(enterNumberLabel);
 		
 		numberField = new JTextField("0");
-		numberField.setHorizontalAlignment(SwingConstants.LEFT);
+		numberField.setHorizontalAlignment(SwingConstants.CENTER);
 		numberField.setBackground(Color.LIGHT_GRAY);
-		numberField.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		numberField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		numberField.setColumns(10);
 		numberField.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
-		numberField.setBounds(200, 50, 30, 25);
+		numberField.setBounds(200, 50, 35, 25);
 		frame.getContentPane().add(numberField);
 		
 		positionLabel = new JLabel("Set position in the table:");
@@ -216,7 +213,7 @@ public class GUI {
 		//table		
 		table = new JTable(5, 5); 
 		table.setBackground(Color.LIGHT_GRAY);
-		table.setFont(new Font("Segoe UI", Font.PLAIN, 22));
+		table.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		table.setBounds(35, 180, 200, 150);
 		table.setRowMargin(1);
 		table.setRowHeight(30);
@@ -442,14 +439,12 @@ public class GUI {
 	}
 	private void save() {
 		try {
-	        FileWriter fw = new FileWriter("data/array.txt", true);
+	        FileWriter fw = new FileWriter("data/array.txt");
 	        for (int i = 0; i < 5; i++) {
 	            for (int j = 0; j < 5; j++) {
-	                if(j == 4){    
-	                    fw.write((int) table.getValueAt(i, j));
-	                } else{
+	             
 	                    fw.write((int) table.getValueAt(i, j) + ",");
-	                }        
+	                      
 	            }
 	            fw.write("\n");
 	        }
