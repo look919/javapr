@@ -12,6 +12,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.awt.event.ActionEvent;
 
 import javax.imageio.ImageIO;
@@ -41,6 +42,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import com.l2fprod.common.swing.JTaskPane;
+
+
+
 /**
  * 
  *  @author: Wirkus Tomasz
@@ -57,8 +62,8 @@ public class GUI {
 	private JTextArea textArea;
 	private JList<String> list;
 	private JMenuBar menuBar;
-	private JMenu menu;
-	private JMenuItem menuItemAdd, menuItemZeros, menuItemSave, menuItemExit, menuItemHelp, menuItemAuthor;
+	private JMenu menuFile, menuEdit, menuHelp;
+	private JMenuItem menuItemAdd, menuItemNew, menuItemOpen, menuItemPrint, menuItemZeros, menuItemSave, menuItemExit, menuItemHelp, menuItemAuthor;
 	private JToolBar toolBar;
 	private JPanel panel;
 	private JButton addButton, zerosButton, fileButton;
@@ -106,9 +111,16 @@ public class GUI {
 		
         //menuBar
 		menuBar = new JMenuBar();
-		menu = new JMenu("Menu");
-		menuBar.add(menu);
+		menuFile = new JMenu("File");
+		menuEdit = new JMenu("Edit");
+		menuHelp = new JMenu("Help");
+		menuBar.add(menuFile);
+		menuBar.add(menuEdit);
+		menuBar.add(menuHelp);
 		
+		menuItemNew = new JMenuItem("New");
+		menuItemOpen = new JMenuItem("Open");
+		menuItemPrint = new JMenuItem("Print");
 		menuItemAdd = new JMenuItem("Add");		//EVENTS ARE DESCRIBED ON THE END OF THE CLASS
 		menuItemZeros = new JMenuItem("Zeros");
 		menuItemSave = new JMenuItem("Save");
@@ -116,12 +128,17 @@ public class GUI {
 		menuItemAuthor = new JMenuItem("Author");	
 		menuItemExit = new JMenuItem("Exit");
 		
-		menu.add(menuItemAdd);
-		menu.add(menuItemZeros);
-		menu.add(menuItemSave);
-		menu.add(menuItemHelp);
-		menu.add(menuItemAuthor);
-		menu.add(menuItemExit);
+		
+		menuFile.add(menuItemNew);
+		menuFile.add(menuItemOpen);
+		menuFile.add(menuItemPrint);
+		menuFile.add(menuItemExit);
+		menuEdit.add(menuItemAdd);
+		menuEdit.add(menuItemZeros);
+		menuEdit.add(menuItemSave);
+		menuHelp.add(menuItemHelp);
+		menuHelp.add(menuItemAuthor);
+		
 		frame.setJMenuBar(menuBar);
 		
 		//toolbar
@@ -133,9 +150,9 @@ public class GUI {
 	    JButton toolBarHelp = new JButton(new ImageIcon("img/help.png"));
 	    JButton toolBarAuthor = new JButton(new ImageIcon("img/author.png"));
 	    JButton toolBarExit = new JButton(new ImageIcon("img/exit.png"));
+
 	    
 	    //seperators to align right which i couldn't achieve otherwise
-	    toolBar.addSeparator(); toolBar.addSeparator(); toolBar.addSeparator(); toolBar.addSeparator(); toolBar.addSeparator();
 	    toolBar.addSeparator(); toolBar.addSeparator(); toolBar.addSeparator(); toolBar.addSeparator(); toolBar.addSeparator();
 	    toolBar.addSeparator(); toolBar.addSeparator(); toolBar.addSeparator(); toolBar.addSeparator(); toolBar.addSeparator();
 	    toolBar.addSeparator(); toolBar.addSeparator(); toolBar.addSeparator(); toolBar.addSeparator(); toolBar.addSeparator();
@@ -162,7 +179,7 @@ public class GUI {
 		enterNumberLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		enterNumberLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		enterNumberLabel.setForeground(new Color(221, 221, 221));
-		enterNumberLabel.setBounds(35, 50, 140, 20);
+		enterNumberLabel.setBounds(20, 50, 140, 20);
 		frame.getContentPane().add(enterNumberLabel);
 		
 		numberField = new JTextField("0");
@@ -171,28 +188,28 @@ public class GUI {
 		numberField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		numberField.setColumns(10);
 		numberField.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
-		numberField.setBounds(200, 50, 35, 25);
+		numberField.setBounds(185, 50, 80, 25);
 		frame.getContentPane().add(numberField);
 		
 		positionLabel = new JLabel("Set position in the table:");
 		positionLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		positionLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		positionLabel.setForeground(new Color(221, 221, 221));
-		positionLabel.setBounds(35, 100, 140, 20);
+		positionLabel.setBounds(20, 100, 200, 20);
 		frame.getContentPane().add(positionLabel);
 		
 		rowLabel = new JLabel("Row:");
 		rowLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		rowLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		rowLabel.setForeground(new Color(221, 221, 221));
-		rowLabel.setBounds(35, 130, 40, 20);
+		rowLabel.setBounds(20, 130, 40, 20);
 		frame.getContentPane().add(rowLabel);
 		
 		columnLabel = new JLabel("Column:");
 		columnLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		columnLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		columnLabel.setForeground(new Color(221, 221, 221));
-		columnLabel.setBounds(135, 130, 60, 20);
+		columnLabel.setBounds(160, 130, 60, 20);
 		frame.getContentPane().add(columnLabel);
 		
 		//spinners	
@@ -202,18 +219,18 @@ public class GUI {
 		JSpinner column = new JSpinner(sm);
 		frame.getContentPane().add(column);
 		column.setBackground(Color.LIGHT_GRAY);
-		column.setBounds(75, 130, 35, 25);	
+		column.setBounds(60, 130, 50, 25);	
 		
 		JSpinner row = new JSpinner(sm2);
 		frame.getContentPane().add(row);
 		row.setBackground(Color.LIGHT_GRAY);
-		row.setBounds(200, 130, 35, 25);
+		row.setBounds(225, 130, 50, 25);
 		
 		
 		//table		
 		table = new JTable(5, 5); 
 		table.setBackground(Color.LIGHT_GRAY);
-		table.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		table.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		table.setBounds(35, 180, 200, 150);
 		table.setRowMargin(1);
 		table.setRowHeight(30);
@@ -280,12 +297,15 @@ public class GUI {
 		frame.getContentPane().add(textArea);
 	
 
-	ImageIcon icon = new ImageIcon("img/java.png");
-    JLabel centerImg = new JLabel(icon);
+		ImageIcon icon = new ImageIcon("img/java.png");
+	    JLabel centerImg = new JLabel(icon);
 		centerImg.setBounds(235, 60, 310, 308);
-	
-
 		frame.getContentPane().add(centerImg);
+		
+//		JTaskPane taskPane = new JTaskPane();
+//		taskPane.setBounds(200,210,200,390);
+//		frame.getContentPane().add(taskPane);
+		
 		
 		//EVENTS
 		menuItemAdd.addActionListener(new ActionListener() {
@@ -389,7 +409,8 @@ public class GUI {
 							}
 						}
 			    		textArea.setForeground(Color.BLACK);
-			    		textArea.setText("\n Average of the elements in \n array equals " + result/25 );    		  
+			    		DecimalFormat df = new DecimalFormat("#.###");
+			    		textArea.setText("\n Average of the elements in \n array equals " + df.format(result/25) );    		  
 			    	}
 			    	if(list.getSelectedIndex() == 2) {
 			    		int resultMAX = (int) table.getValueAt(0, 0);
